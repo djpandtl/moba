@@ -5,9 +5,15 @@
       <el-submenu index="1">
         <template slot="title"><i class="el-icon-document"></i>内容管理</template>
         <el-menu-item-group>
-          <template slot="title" >分组</template>
+          <template slot="title" >分类</template>
           <el-menu-item index="/categories/create">新建分类</el-menu-item>
           <el-menu-item index="/categories/list">分类列表</el-menu-item>
+        </el-menu-item-group>
+
+         <el-menu-item-group>
+          <template slot="title" >物品</template>
+          <el-menu-item index="/items/create">新建物品</el-menu-item>
+          <el-menu-item index="/items/list">分类物品</el-menu-item>
         </el-menu-item-group>
 
       </el-submenu>
