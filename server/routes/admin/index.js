@@ -30,7 +30,8 @@ module.exports = app => {
 
   // 获取分类列表
   router.get('/categories', async (req, res) => {
-    const items = await Category.find().limit(10)
+    // 草了 顺序错了 先 find 后 populate
+    const items = await Category.find().populate('parent').limit(10)
     res.send(items)
   })
 
