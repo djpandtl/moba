@@ -48,7 +48,7 @@ export default {
       })
     },
     async fetch() {
-      const res = await this.$http.get(`category/${this.id}`)
+      const res = await this.$http.get(`categories/${this.id}`)
       this.model = res.data
 
       console.log('获取单个分类', this.model)

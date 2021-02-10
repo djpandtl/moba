@@ -12,6 +12,7 @@ const routes = [
     path: '/',
     name: 'Main',
     component: Main,
+    redirect: 'categories/create',
     children: [
       {
         path: 'categories/create',
@@ -21,7 +22,7 @@ const routes = [
       // 创建页 和 编辑页共用一个组件
       {
         path: 'categories/edit/:id',
-        name: 'categories-create',
+        name: 'categories-edit',
         component: CategoriesCreate,
         // props 表明该组件接收的属性
         props: true
