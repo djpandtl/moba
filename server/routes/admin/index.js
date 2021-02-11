@@ -58,4 +58,14 @@ module.exports = app => {
 
     next()
   } , router)
+
+  // 图片上传路由
+  const multer = require('multer')
+  const upload = multer({ dest: __dirname + '/../../uploads' })
+
+  app.post('/admin/api/upload', upload.single('file'), async (req, res) => {
+    const file = req.file // req 中的 file 来自于中间件的处理
+    file.url = `http://127.0.0.1:8585/uploads/${file.filename}`
+    res.send(file)
+  })
 }

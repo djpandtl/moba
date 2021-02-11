@@ -1,13 +1,13 @@
 <template>
   <div>
-    <h1>{{ id ? "编辑" : '新建'}}物品</h1>
+    <h1>{{ id ? "编辑" : '新建'}}英雄</h1>
     <el-form ref="form" :model="model" 
      label-width="80px" @submit.prevent.native="save">
 
       <el-form-item label="名称">
         <el-input v-model="model.name"></el-input>
       </el-form-item>
-      <el-form-item label="图标">
+      <el-form-item label="头像">
         <!-- <el-input v-model="model.img"></el-input> -->
         <el-upload
           class="avatar-uploader"
@@ -15,7 +15,7 @@
           :show-file-list="false"
           :on-success="afterUpload"
           >
-          <img v-if="model.icon" :src="model.icon" class="avatar">
+          <img v-if="model.avatar" :src="model.avatar" class="avatar">
           <i v-else class="el-icon-plus avatar-uploader-icon"></i>
         </el-upload>
       </el-form-item>
@@ -35,7 +35,10 @@ export default {
   },
   data() {
     return {
-      model: {},
+      model: {
+        name: '',
+        avatar: ''
+      },
     }
   },
   methods: {
@@ -44,15 +47,15 @@ export default {
 
       if (this.id) {
         console.log('id---', this.model)
-        res = await this.$http.put(`rest/items/${this.id}`, this.model)
+        res = await this.$http.put(`rest/heros/${this.id}`, this.model)
       } else {
-       res = await this.$http.post('rest/items', this.model)
+       res = await this.$http.post('rest/heros', this.model)
       }
 
       this.model = res.data
       console.log('res mode', this.model)
 
-      this.$router.push('/items/list')
+      this.$router.push('/heros/list')
 
       // 提示信息
       this.$message({
@@ -61,7 +64,7 @@ export default {
       })
     },
     async fetch() {
-      const res = await this.$http.get(`rest/items/${this.id}`)
+      const res = await this.$http.get(`rest/heros/${this.id}`)
       this.model = res.data
 
       console.log('获取单个分类', this.model)
@@ -69,8 +72,8 @@ export default {
     afterUpload(res) {
       console.log('img upload', res)
       
-      // this.model.icon =  res.url // 非响应式
-      this.$set(this.model, 'icon', res.url)
+      // this.model.avatar = res.url
+      this.$set(this.model, 'avatar', res.url)
     },
   },
   created() {

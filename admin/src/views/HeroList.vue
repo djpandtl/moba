@@ -1,16 +1,16 @@
 <template>
   <div>
-    <h1>物品列表</h1>
+    <h1>英雄列表</h1>
     <el-table :data="items">
       <el-table-column prop="_id" label="ID" width="220">
       </el-table-column>
       <!-- <el-table-column prop="parent.name" label="上级分类">
       </el-table-column> -->
-      <el-table-column prop="name" label="物品名称">
+      <el-table-column prop="name" label="英雄名称">
       </el-table-column>
-      <el-table-column label="图片">
+      <el-table-column label="头像">
         <template slot-scope="scope">
-         <img :src="scope.row.icon" style="height: 3rem;">
+         <img :src="scope.row.avatar" style="height: 3rem;">
         </template>
       </el-table-column>
 
@@ -41,13 +41,13 @@
     },
     methods: {
       async fetch() {
-        const res = await this.$http.get('rest/items')
+        const res = await this.$http.get('rest/heros')
         this.items = res.data
       },
       // 跳转到编辑页
       edit(scope) {
         console.log('scope row', scope.$index)
-        this.$router.push(`/items/edit/${scope.row._id}`)
+        this.$router.push(`/heros/edit/${scope.row._id}`)
       },
       async remove(scope) {
         // 弹框
@@ -56,7 +56,7 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(async () => {
-          const res =  await this.$http.delete(`rest/items/${scope.row._id}`)
+          const res =  await this.$http.delete(`rest/heros/${scope.row._id}`)
           if (res.data.status) {
             this.showMessage('删除成功!', 'success')
 
