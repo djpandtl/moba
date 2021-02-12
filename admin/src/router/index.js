@@ -11,6 +11,9 @@ import ItemEdit from '../views/ItemEdit.vue'
 import HeroList from '../views/HeroList.vue'
 import HeroEdit from '../views/HeroEdit.vue'
 
+import ArticleEdit from '../views/ArticleEdit'
+import ArticleList from '../views/ArticleList'
+
 Vue.use(VueRouter)
 
 const routes = [
@@ -72,6 +75,24 @@ const routes = [
         path: '/heros/edit/:id',
         name: 'heros-edit',
         component: HeroEdit,
+        props: true
+      },
+      {
+        path: '/articles/list',
+        name: 'articles-list',
+        component: ArticleList
+      },
+      {
+        path: '/articles/create',
+        name: 'articles-create',
+        component: ArticleEdit
+      },
+
+      // 文章编辑
+      {
+        path: '/articles/edit/:id',
+        name: 'articles-edit',
+        component: ArticleEdit,
         props: true
       },
     ]
