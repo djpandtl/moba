@@ -7,8 +7,22 @@
       <el-form-item label="名称">
         <el-input v-model="model.name"></el-input>
       </el-form-item>
+      <el-form-item label="称号">
+        <el-input v-model="model.title"></el-input>
+      </el-form-item>
+      <el-form-item label="类型">
+        <el-select v-model="model.categories" multiple  placeholder="请选择">
+          <el-option
+            v-for="item in categories"
+            :key="item._id"
+            :label="item.name"
+            :value="item._id">
+          </el-option>
+        </el-select>
+
+      </el-form-item>
+
       <el-form-item label="头像">
-        <!-- <el-input v-model="model.img"></el-input> -->
         <el-upload
           class="avatar-uploader"
           :action="$http.defaults.baseURL + '/upload'"
@@ -19,7 +33,61 @@
           <i v-else class="el-icon-plus avatar-uploader-icon"></i>
         </el-upload>
       </el-form-item>
-    
+
+      <el-form-item label="难度">
+        <el-rate :max='10' show-score
+          v-model="model.scores.difficult" style="margin-top: 0.7rem">
+        </el-rate>
+      </el-form-item>
+      <el-form-item label="技能">
+        <el-rate :max='10' show-score
+          v-model="model.scores.skills" style="margin-top: 0.7rem">
+        </el-rate>
+      </el-form-item>
+      <el-form-item label="攻击">
+        <el-rate :max='10' show-score
+          v-model="model.scores.attack" style="margin-top: 0.7rem">
+        </el-rate>
+      </el-form-item>
+      <el-form-item label="生存">
+        <el-rate :max='10' show-score
+          v-model="model.scores.survive" style="margin-top: 0.7rem">
+        </el-rate>
+      </el-form-item>
+      
+      <el-form-item label="顺风出装">
+        <el-select v-model="model.items1" multiple  placeholder="请选择">
+          <el-option
+            v-for="item in items"
+            :key="item._id"
+            :label="item.name"
+            :value="item._id">
+          </el-option>
+        </el-select>
+
+      </el-form-item>
+
+       <el-form-item label="逆风出装">
+        <el-select v-model="model.items2" multiple  placeholder="请选择">
+          <el-option
+            v-for="item in items"
+            :key="item._id"
+            :label="item.name"
+            :value="item._id">
+          </el-option>
+        </el-select>
+      </el-form-item>
+
+      <el-form-item label="使用技巧">
+        <el-input v-model="model.usageTips" type="textarea"></el-input>
+      </el-form-item>
+      <el-form-item label="对战技巧">
+        <el-input v-model="model.battleTips" type="textarea"></el-input>
+      </el-form-item>
+      <el-form-item label="团战技巧">
+        <el-input v-model="model.teamTips" type="textarea"></el-input>
+      </el-form-item>
+
       <el-form-item>
         <el-button type="primary" native-type='submit'>保存</el-button>
       </el-form-item>
@@ -37,8 +105,11 @@ export default {
     return {
       model: {
         name: '',
-        avatar: ''
+        avatar: '',
+        scores: { difficult: 0 }
       },
+      categories: [],
+      items: []
     }
   },
   methods: {
@@ -65,9 +136,21 @@ export default {
     },
     async fetch() {
       const res = await this.$http.get(`rest/heros/${this.id}`)
-      this.model = res.data
+
+      // this.model = res.data // model.scores.difficult 会报错
+      this.model = Object.assign({}, this.model, res.data)
 
       console.log('获取单个分类', this.model)
+    },
+    async fetchCategories() {
+      const res = await this.$http.get(`rest/categories`)
+      this.categories = res.data
+
+    },
+    async fetchItems() {
+      const res = await this.$http.get(`rest/items`)
+      this.items = res.data
+
     },
     afterUpload(res) {
       console.log('img upload', res)
@@ -77,7 +160,11 @@ export default {
     },
   },
   created() {
-    this.model = {}
+    // this.model = {}
+    console.log('this model', this.model)
+
+    this.fetchCategories()
+    this.fetchItems()
     // 当存在 id 也就是编辑分类时才发送请求
     this.id && this.fetch()
   }
