@@ -14,6 +14,9 @@ import HeroEdit from '../views/HeroEdit.vue'
 import ArticleEdit from '../views/ArticleEdit'
 import ArticleList from '../views/ArticleList'
 
+import AdEdit from '../views/AdEdit'
+import AdList from '../views/AdList'
+
 Vue.use(VueRouter)
 
 const routes = [
@@ -95,6 +98,26 @@ const routes = [
         component: ArticleEdit,
         props: true
       },
+      // 广告
+      {
+        path: '/ads/list',
+        name: 'ads-list',
+        component: AdList
+      },
+      {
+        path: '/ads/create',
+        name: 'ads-create',
+        component: AdEdit
+      },
+
+      // 文章编辑
+      {
+        path: '/ads/edit/:id',
+        name: 'ads-edit',
+        component: AdEdit,
+        props: true
+      },
+
     ]
   },
   /* {
