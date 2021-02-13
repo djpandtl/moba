@@ -17,9 +17,16 @@ import ArticleList from '../views/ArticleList'
 import AdEdit from '../views/AdEdit'
 import AdList from '../views/AdList'
 
+
+import AdminUserEdit from '../views/AdminUserEdit'
+import AdminUserList from '../views/AdminUserList'
+
+import Login from '../views/Login'
+
 Vue.use(VueRouter)
 
 const routes = [
+  { path: '/login', name: 'login', component: Login },
   {
     path: '/',
     name: 'Main',
@@ -110,7 +117,6 @@ const routes = [
         component: AdEdit
       },
 
-      // 文章编辑
       {
         path: '/ads/edit/:id',
         name: 'ads-edit',
@@ -118,14 +124,27 @@ const routes = [
         props: true
       },
 
+      // 管理员用户
+      {
+        path: '/admin_user/list',
+        name: 'admin-list',
+        component: AdminUserList
+      },
+      {
+        path: '/admin_user/create',
+        name: 'admin-create',
+        component: AdminUserEdit
+      },
+
+      {
+        path: '/admin_user/edit/:id',
+        name: 'admin-edit',
+        component: AdminUserEdit,
+        props: true
+      },
+
     ]
   },
-  /* {
-    path: '/about',
-    name: 'About',
-    
-    component: () => import('../views/About.vue')
-  } */
 ]
 
 const router = new VueRouter({
