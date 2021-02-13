@@ -1,4 +1,8 @@
 const { model } = require('mongoose')
+const jwt = require('jsonwebtoken')
+const AdminUser = require(`../../models/AdminUser.js`)
+
+const assert = require('http-assert')
 
 module.exports = app => {
   const express = require('express')
@@ -22,14 +26,27 @@ module.exports = app => {
   router.delete('/:id', async (req, res) => {
     await req.Modle.findByIdAndDelete(req.params.id)
 
-    console.log('delete----')
-    res.send({
+    return res.send({
       status: true
     })
   })
 
   // 获取分类列表
-  router.get('/', async (req, res) => {
+  router.get('/',  async (req, res, next) => {
+    // token 验证，只有登录的人才可以访问
+    const token = req.headers.authorization
+    assert(token, 401, "请先登录")
+    const tokenData = String(token || '').split(" ").pop()
+
+    // 若没有 token， jwt会抛出错误
+    const { id } = jwt.verify(tokenData, app.get('secret'))
+    assert(id, 401, "id错误了！！")
+
+    req.user = await AdminUser.findById(id)
+    assert(req.user, 401, "没有该用户！")
+
+    await next()
+  } ,async (req, res) => {
     // 草了 顺序错了 先 find 后 populate
     // const items = await req.Modle.find().populate('parent').limit(10)
     const queryOptions = {}
@@ -71,27 +88,23 @@ module.exports = app => {
 
   // 登录路由
   app.post('/admin/api/login', async (req, res) => {
-    const AdminUser = require(`../../models/AdminUser.js`)
 
     const { username, password }  = req.body
     const user = await AdminUser.findOne({username}).select('+password')
 
-    if (!user) { // 不存在当前 user 
+    /* if (!user) { // 不存在当前 user 
       return res.status(422).send({
         message: "用户不存在！"
       })
-    }
-    console.log('user', user)
+    } */
+    assert(user, 422, "用户名有误！")
+    // console.log('user', user)
     // 用户存在则验证密码
     const isValid = require('bcrypt').compareSync(password, user.password)
-    if (!isValid) {
-      return res.status(422).send({
-        message: '密码错误！'
-      })
-    }
-
+    
+    assert(isValid, 422, "密码错误！")
     // 用户名和密码都对是发送 jwt
-    const token = require('jsonwebtoken').sign({ id: user._id }, app.get('secret'))
+    const token = jwt.sign({ id: user._id }, app.get('secret'))
     res.send({
       token
     })
@@ -100,5 +113,13 @@ module.exports = app => {
   app.get('/admin/api/login', async (req, res) => {
     const AdminUser = require(`../../models/AdminUser.js`)
     res.send(await AdminUser.find())
+  })
+
+  // 错误处理中间件 -- assert 抛出的错误会被捕获
+  app.use((err, req, res, next) => {
+    // 500 是防止没有抛出状态码，比如 jwt不会抛出状态码
+    res.status(err.statusCode || 500).send({     
+      message: err.message
+    })
   })
 }
