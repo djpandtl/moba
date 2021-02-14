@@ -60,6 +60,8 @@ export default {
    
   },
   created() {
+    console.log('router', this.$router)
+    console.log('route', this.$route)
     // this.model = {}
     // 当存在 id 也就是编辑分类时才发送请求
     this.id && this.fetch()

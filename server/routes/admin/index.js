@@ -1,8 +1,5 @@
 const { model } = require('mongoose')
-const jwt = require('jsonwebtoken')
 const AdminUser = require(`../../models/AdminUser.js`)
-
-const assert = require('http-assert')
 
 module.exports = app => {
   const express = require('express')
@@ -32,21 +29,7 @@ module.exports = app => {
   })
 
   // 获取分类列表
-  router.get('/',  async (req, res, next) => {
-    // token 验证，只有登录的人才可以访问
-    const token = req.headers.authorization
-    assert(token, 401, "请先登录")
-    const tokenData = String(token || '').split(" ").pop()
-
-    // 若没有 token， jwt会抛出错误
-    const { id } = jwt.verify(tokenData, app.get('secret'))
-    assert(id, 401, "id错误了！！")
-
-    req.user = await AdminUser.findById(id)
-    assert(req.user, 401, "没有该用户！")
-
-    await next()
-  } ,async (req, res) => {
+  router.get('/', async (req, res) => {
     // 草了 顺序错了 先 find 后 populate
     // const items = await req.Modle.find().populate('parent').limit(10)
     const queryOptions = {}
@@ -67,20 +50,16 @@ module.exports = app => {
 
   // 使用通用接口 -- 路由和模型一一对应，如 categories -- Category
   // 对于通用的内容，放到中间件中处理
-  app.use('/admin/api/rest/:resource', async (req, res, next) => {
-    const inflection = require('inflection')
-    // 根据路由找模型
-    const modelName = inflection.classify(req.params.resource)
-    req.Modle = require(`../../models/${modelName}.js`)
+  const resourceMiddleware = require('../../middleware/resource.js')
+  const authMiddleware = require('../../middleware/auth.js')
 
-    next()
-  } , router)
+  app.use('/admin/api/rest/:resource', authMiddleware(), resourceMiddleware, router)
 
   // 图片上传路由
   const multer = require('multer')
   const upload = multer({ dest: __dirname + '/../../uploads' })
 
-  app.post('/admin/api/upload', upload.single('file'), async (req, res) => {
+  app.post('/admin/api/upload', authMiddleware(), upload.single('file'), async (req, res) => {
     const file = req.file // req 中的 file 来自于中间件的处理
     file.url = `http://127.0.0.1:8585/uploads/${file.filename}`
     res.send(file)
