@@ -26,7 +26,11 @@ import Login from '../views/Login'
 Vue.use(VueRouter)
 
 const routes = [
-  { path: '/login', name: 'login', component: Login },
+  { path: '/login', name: 'login', component: Login, 
+    meta: {
+      isPublic: true
+    } 
+  },
   {
     path: '/',
     name: 'Main',
@@ -149,6 +153,20 @@ const routes = [
 
 const router = new VueRouter({
   routes
+})
+
+router.beforeEach((to, from, next) => {
+  // console.log('from router', from)
+  // console.log('to router', to)
+  // 通过 isPublic 字段确定访问权限
+  if(!to.meta.isPublic && !localStorage.token) {
+    // token 简单验证，伪造 token的时候可以进去.....
+    next({ path: '/login'})
+
+  } else {
+    next()
+
+  }
 })
 
 export default router

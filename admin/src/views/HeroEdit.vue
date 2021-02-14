@@ -27,9 +27,10 @@
         <el-form-item label="头像">
           <el-upload
             class="avatar-uploader"
-            :action="$http.defaults.baseURL + '/upload'"
+            :action="uploadUrl"
             :show-file-list="false"
             :on-success="afterUpload"
+            :headers="getAuthHeaders()"
             >
             <img v-if="model.avatar" :src="model.avatar" class="avatar">
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
@@ -106,9 +107,10 @@
             <el-form-item label="图标">
               <el-upload
                 class="avatar-uploader"
-                :action="$http.defaults.baseURL + '/upload'"
+                :action="uploadUrl"
                 :show-file-list="false"
                 :on-success="(res) => {$set(item, 'icon', res.url)}"
+                :headers="getAuthHeaders()"
                 >
                 <img v-if="item.icon" :src="item.icon" class="avatar">
                 <i v-else class="el-icon-plus avatar-uploader-icon"></i>

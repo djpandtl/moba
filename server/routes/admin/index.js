@@ -1,5 +1,8 @@
 const { model } = require('mongoose')
+
 const AdminUser = require(`../../models/AdminUser.js`)
+const assert = require('http-assert')
+const jwt = require('jsonwebtoken')
 
 module.exports = app => {
   const express = require('express')
@@ -77,7 +80,9 @@ module.exports = app => {
       })
     } */
     assert(user, 422, "用户名有误！")
-    // console.log('user', user)
+
+    // 密码为空的处理
+    // assert(user.password, 422, "密码不能为空")
     // 用户存在则验证密码
     const isValid = require('bcrypt').compareSync(password, user.password)
     
