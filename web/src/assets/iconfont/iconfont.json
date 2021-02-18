@@ -1,0 +1,30 @@
+{
+  "id": "2374828",
+  "name": "moba",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "18787698",
+      "name": "点点点",
+      "font_class": "zu3649",
+      "unicode": "e624",
+      "unicode_decimal": 58916
+    },
+    {
+      "icon_id": "6812008",
+      "name": "menu",
+      "font_class": "menu",
+      "unicode": "e6ec",
+      "unicode_decimal": 59116
+    },
+    {
+      "icon_id": "17580437",
+      "name": "hero",
+      "font_class": "icon_nav_hero",
+      "unicode": "e612",
+      "unicode_decimal": 58898
+    }
+  ]
+}

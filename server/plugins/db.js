@@ -18,4 +18,7 @@ module.exports = app => {
   conn.on('connected', () => { // 连接成功回调
     console.log("数据库连接成功~")
   })
+
+  require('require-all')(__dirname + '/../models')
+  console.log('__dirname', __dirname + '/../models')
 }
