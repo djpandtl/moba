@@ -3,7 +3,8 @@ import Vue from 'vue'
 import router from './router'
 
 const http = axios.create({
-  baseURL: 'http://127.0.0.1:8585/admin/api'
+  baseURL: process.env.VUE_APP_API_URL || '/admin/api'
+  // baseURL: 'http://127.0.0.1:8585/admin/api'
 })
 
 // 添加响应拦截器

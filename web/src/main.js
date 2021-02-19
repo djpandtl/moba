@@ -5,6 +5,9 @@ import store from './store'
 
 import './assets/style/style.scss'
 
+import http from './http.js'
+Vue.prototype.$http = http
+
 import MCard from './components/MCard.vue'
 Vue.component('m-card', MCard)
 

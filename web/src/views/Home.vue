@@ -64,6 +64,15 @@
     <m-card title="英雄列表" icon="icon-menu"></m-card>
     <m-card title="精彩视频" icon="icon-menu"></m-card>
     <m-card title="啦啦啦" icon="icon-menu"></m-card>
+
+     <div class="bg-dart" style="height: 5rem">
+       <h1 class="mb-4">
+         <router-link to="/article/602d226bb09d9a23b426aad9">Article</router-link>
+       </h1>
+        <h1>
+         <router-link to="/hero/602e1bef286b0e1f142708fc">Heroes</router-link>
+       </h1>
+     </div>
   </div>
 </template>
 <script>
